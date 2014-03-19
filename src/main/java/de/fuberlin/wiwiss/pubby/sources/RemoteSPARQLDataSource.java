@@ -289,6 +289,7 @@ public class RemoteSPARQLDataSource implements DataSource {
 	
 	private ResultSet execQuerySelect(String query) {
 		QueryEngineHTTP endpoint = new QueryEngineHTTP(endpointURL, query);
+        endpoint.setSelectContentType("application/sparql-results+xml");
 		if (defaultGraphURI != null) {
 			endpoint.setDefaultGraphURIs(Collections.singletonList(defaultGraphURI));
 		}
