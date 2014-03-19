@@ -1,37 +1,48 @@
-## Renders a set of ResourceProperties, given in $properties, as a property-value table
-    <table class="description">
-      <colgroup>
-        <col class="property-column" span="1">
-        <col class="value-column" span="1">
-      </colgroup>
-#foreach ($property in $properties)
-#if ($velocityCount % 2 == 0)
-#set ($odd_even = "even")
-#else
-#set ($odd_even = "odd")
+
+#if ($classes && !$classes.Empty)
+  <div>
+    <ul class="classes inline pull-right">
+#foreach ($value in $classes)
+      <li class="class-name">
+#parse("rdf-term.vm")
+        <i class="icon-tag"></i>
+      </li>
 #end
-      <tr class="$odd_even">
-        <td class="property">
+    </ul>
+  </div>
+#end
+
+## Renders a set of ResourceProperties, given in $properties, as a property-value table
+  <table class="table table-bordered property-table">
+    <colgroup>
+      <col class="property-column" span="1">
+      <col class="value-column" span="1">
+    </colgroup>
+    <thead>
+      <tr><th>Property</th><th>Value</th></tr>
+    </thead>
+    <tbody> 
+#foreach ($property in $properties)
+#if ($property.URI != 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type' || $property.Inverse)
+      <tr>
+        <td>
 #parse("property-name.vm")
         </td>
-        <td>
+        <td class="property-value">
 #if ($property.hasOnlySimpleValues())
 #parse("values.vm")
 #else
-          <span class="values-summary">
-#if ($property.ValueCount == 1)
-#set ($text = "1 value")
-#else
-#set ($text = "$property.ValueCount values")
-#end
 #if ($property.ValuesPageURL)
-            [<a href="$property.ValuesPageURL">$text</a>]
+          <a href="$property.ValuesPageURL">
+            <span class="badge">$property.ValueCount</span>
+          </a>
 #else
-            [$text]
+          <span class="badge">$property.ValueCount</span> <small class="muted">&nbsp;&nbsp;anonymous</small>
 #end
-          </span>
 #end
         </td>
       </tr>
 #end
-    </table>
+#end
+    </tbody>
+  </table>
