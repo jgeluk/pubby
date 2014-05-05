@@ -255,6 +255,8 @@ public class RemoteSPARQLDataSource implements DataSource {
 		
 		// The rest is more or less a copy of QueryEngineHTTP.execModel()
 		httpQuery.setAccept(contentType);
+        httpQuery.setAllowDeflate(false);
+        httpQuery.setAllowGZip(false);
 		InputStream in = httpQuery.exec();
 
 		// Don't assume the endpoint actually gives back the content type we
@@ -290,6 +292,8 @@ public class RemoteSPARQLDataSource implements DataSource {
 	private ResultSet execQuerySelect(String query) {
 		QueryEngineHTTP endpoint = new QueryEngineHTTP(endpointURL, query);
         endpoint.setSelectContentType("application/sparql-results+xml");
+        endpoint.setAllowDeflate(false);
+        endpoint.setAllowGZip(false);
 		if (defaultGraphURI != null) {
 			endpoint.setDefaultGraphURIs(Collections.singletonList(defaultGraphURI));
 		}
